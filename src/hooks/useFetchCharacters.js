@@ -6,7 +6,10 @@ export default function useFetchCharacters(
 ) {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
+  const [errorData, setErrorData] = useState({
+    isError: false,
+    message: null,
+  });
 
   useEffect(() => {
     const shuffle = (arr) => {
@@ -18,21 +21,34 @@ export default function useFetchCharacters(
 
     const fetchCharacters = async () => {
       try {
-        const {
-          data: { data },
-        } = await axios.get(url);
+        const response = await axios.get(url);
 
-        const characters = shuffle(
-          data.map(({ name, images }) => ({
-            name,
-            image_url: images?.jpg?.image_url,
-          })),
-        );
+        // Response structure might be change
+        if (!response.data?.data) {
+          throw new Error('Invalid response format from endpoint');
+        }
 
-        setCharacters(characters);
+        const characters = response.data.data.map(({ name, images }) => {
+          if (!name || !images?.jpg?.image_url) {
+            throw new Error('Missing required field');
+          }
+
+          return { name, image_url: images.jpg.image_url };
+        });
+
+        setCharacters(shuffle(characters));
       } catch (error) {
-        alert(`${error.response}: Could not fetch data.`);
-        setIsError(true);
+        let errorMessage = 'An unexpected error occured';
+
+        if (error.response) {
+          errorMessage = `${error.response.status} ${error.response.statusText}`;
+        } else if (error.request) {
+          errorMessage = 'No response received';
+        } else {
+          errorMessage = error.message;
+        }
+
+        setErrorData({ isError: true, message: errorMessage });
       } finally {
         setIsLoading(false);
       }
@@ -41,5 +57,5 @@ export default function useFetchCharacters(
     fetchCharacters();
   }, [url]);
 
-  return { characters, isLoading, isError };
+  return { characters, isLoading, errorData };
 }
