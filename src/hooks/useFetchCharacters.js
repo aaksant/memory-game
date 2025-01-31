@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 export default function useFetchCharacters(
-  url = 'https://api.jikan.moe/v4/top/characters',
+  url = 'https://api.jikan.moe/v4/top/charactersz',
 ) {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -10,6 +11,7 @@ export default function useFetchCharacters(
     isError: false,
     message: null,
   });
+  const isToastShownRef = useRef(false);
 
   useEffect(() => {
     const shuffle = (arr) => {
@@ -46,6 +48,11 @@ export default function useFetchCharacters(
           errorMessage = 'No response received';
         } else {
           errorMessage = error.message;
+        }
+
+        if (!isToastShownRef.current) {
+          toast.error(errorMessage);
+          isToastShownRef.current = true;
         }
 
         setErrorData({ isError: true, message: errorMessage });
