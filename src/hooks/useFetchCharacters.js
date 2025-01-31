@@ -3,7 +3,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 export default function useFetchCharacters(
-  url = 'https://api.jikan.moe/v4/top/charactersz',
+  url = 'https://api.jikan.moe/v4/top/characters',
 ) {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
