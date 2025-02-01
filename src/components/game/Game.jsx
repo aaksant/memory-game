@@ -1,16 +1,15 @@
-// TODO: Implement error handling in useFetchCharacters
-
 import Cards from './Cards';
 import useFetchCharacters from '../../hooks/useFetchCharacters';
 import Loading from './Loading';
 
-export default function Game() {
+export default function Game({ level }) {
   const { characters, isLoading } = useFetchCharacters();
+  const shownCharacters = characters.slice(0, level.numberOfCards);
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center">
       {isLoading && <Loading />}
-      <Cards characters={characters} />
+      <Cards characters={shownCharacters} />
     </div>
   );
 }
