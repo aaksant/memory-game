@@ -1,5 +1,5 @@
 import LevelButton from './LevelButton';
-import levels from './levels';
+import levels from '../../levels';
 
 export default function LevelButtons({ handleStartGame }) {
   return (
