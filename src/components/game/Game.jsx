@@ -1,9 +1,10 @@
 import Cards from './Cards';
 import useFetchCharacters from '../../hooks/useFetchCharacters';
 import Loading from './Loading';
+import RoundCounter from './RoundCounter';
 
-export default function Game({ level, handleCardClick }) {
-  const { characters, isLoading } = useFetchCharacters();
+export default function Game({ level, currentRound, handleCardClick }) {
+  const { characters, isLoading } = useFetchCharacters(level.rounds);
 
   const shuffle = arr => {
     return arr
@@ -16,8 +17,20 @@ export default function Game({ level, handleCardClick }) {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      {isLoading && <Loading />}
-      <Cards characters={shownCharacters} handleCardClick={handleCardClick} />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <RoundCounter
+            currentRound={currentRound}
+            totalRounds={level.rounds}
+          />
+          <Cards
+            characters={shownCharacters}
+            handleCardClick={handleCardClick}
+          />
+        </>
+      )}
     </div>
   );
 }
