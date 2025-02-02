@@ -1,6 +1,9 @@
-export default function Card({ image_url, name }) {
+export default function Card({ image_url, name, handleCardClick }) {
   return (
-    <article className="w-64 transform cursor-pointer overflow-hidden rounded-lg bg-white shadow-lg transition-transform hover:shadow-xl md:w-56">
+    <article
+      className="w-64 transform cursor-pointer overflow-hidden rounded-lg bg-white shadow-lg transition-transform hover:shadow-xl md:w-56"
+      onClick={handleCardClick}
+    >
       <img
         src={image_url}
         alt={name}

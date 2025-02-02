@@ -1,10 +1,14 @@
 import Card from './Card';
 
-export default function Cards({ characters }) {
+export default function Cards({ characters, handleCardClick }) {
   return (
-    <div className="grid grid-cols-1 justify-items-center gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="flex flex-wrap justify-center gap-8">
       {characters.map(character => (
-        <Card {...character} key={crypto.randomUUID()} />
+        <Card
+          {...character}
+          key={crypto.randomUUID()}
+          handleCardClick={() => handleCardClick(character.mal_id)}
+        />
       ))}
     </div>
   );
