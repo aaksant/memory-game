@@ -20,7 +20,7 @@ export default function App() {
 
   const recordClickedCard = cardId => {
     if (clickedCards.includes(cardId)) {
-      console.log('clicked');
+      reset();
     } else {
       setClickedCards([...clickedCards, cardId]);
       updateRound();
@@ -29,13 +29,19 @@ export default function App() {
 
   const updateRound = () => {
     if (currentRound === gameState.level.rounds - 1) {
-      setGameState({
-        isPlaying: false,
-        level: null
-      });
+      reset();
     } else {
       setCurrentRound(currentRound + 1);
     }
+  };
+
+  const reset = () => {
+    setGameState({
+      isPlaying: false,
+      level: null
+    });
+    setCurrentRound(1);
+    setClickedCards([]);
   };
 
   return (
