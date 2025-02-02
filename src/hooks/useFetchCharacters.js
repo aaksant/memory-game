@@ -14,13 +14,6 @@ export default function useFetchCharacters(
   const isToastShownRef = useRef(false);
 
   useEffect(() => {
-    const shuffle = arr => {
-      return arr
-        .map(item => ({ item, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ item }) => item);
-    };
-
     const fetchCharacters = async () => {
       try {
         const response = await axios.get(url);
@@ -40,7 +33,7 @@ export default function useFetchCharacters(
           }
         );
 
-        setCharacters(shuffle(characters));
+        setCharacters(characters);
       } catch (error) {
         let errorMessage = 'An unexpected error occured';
 
