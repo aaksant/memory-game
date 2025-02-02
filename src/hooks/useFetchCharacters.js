@@ -3,20 +3,20 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 export default function useFetchCharacters(
-  url = 'https://api.jikan.moe/v4/top/characters',
+  url = 'https://api.jikan.moe/v4/top/characters'
 ) {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorData, setErrorData] = useState({
     isError: false,
-    message: null,
+    message: null
   });
   const isToastShownRef = useRef(false);
 
   useEffect(() => {
-    const shuffle = (arr) => {
+    const shuffle = arr => {
       return arr
-        .map((item) => ({ item, sort: Math.random() }))
+        .map(item => ({ item, sort: Math.random() }))
         .sort((a, b) => a.sort - b.sort)
         .map(({ item }) => item);
     };
@@ -30,13 +30,15 @@ export default function useFetchCharacters(
           throw new Error('Invalid response format from endpoint');
         }
 
-        const characters = response.data.data.map(({ name, images }) => {
-          if (!name || !images?.jpg?.image_url) {
-            throw new Error('Missing required field');
-          }
+        const characters = response.data.data.map(
+          ({ mal_id, name, images }) => {
+            if (!mal_id || !name || !images?.jpg?.image_url) {
+              throw new Error('Missing required field');
+            }
 
-          return { name, image_url: images.jpg.image_url };
-        });
+            return { mal_id, name, image_url: images.jpg.image_url };
+          }
+        );
 
         setCharacters(shuffle(characters));
       } catch (error) {
