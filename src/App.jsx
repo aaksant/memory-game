@@ -8,6 +8,7 @@ export default function App() {
     isPlaying: false,
     level: null
   });
+  const [clickedCards, setClickedCards] = useState([]);
 
   const handleStartGame = level => {
     setGameState({
@@ -16,12 +17,20 @@ export default function App() {
     });
   };
 
+  const recordClickedCard = cardId => {
+    if (clickedCards.includes(cardId)) {
+      console.log('clicked');
+    } else {
+      setClickedCards([...clickedCards, cardId]);
+    }
+  };
+
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center p-4">
       {!gameState.isPlaying ? (
         <Home handleStartGame={handleStartGame} />
       ) : (
-        <Game level={gameState.level} />
+        <Game level={gameState.level} handleCardClick={recordClickedCard} />
       )}
       <Toaster />
     </div>
