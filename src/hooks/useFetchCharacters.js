@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-export default function useFetchCharacters(numberOfCharacters) {
+export default function useFetchCharacters(rounds) {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorData, setErrorData] = useState({
@@ -15,6 +15,8 @@ export default function useFetchCharacters(numberOfCharacters) {
     const fetchCharacters = async () => {
       try {
         const url = 'https://api.jikan.moe/v4/top/characters';
+        //  Add aditional chracters too make the game harder
+        const additionalCharacters = 5;
         const response = await axios.get(url);
 
         // Response structure might be change
@@ -32,7 +34,7 @@ export default function useFetchCharacters(numberOfCharacters) {
           }
         );
 
-        setCharacters(characters.slice(0, Math.ceil(numberOfCharacters / 2)));
+        setCharacters(characters.slice(0, rounds + additionalCharacters));
       } catch (error) {
         let errorMessage = 'An unexpected error occured';
 
@@ -56,7 +58,7 @@ export default function useFetchCharacters(numberOfCharacters) {
     };
 
     fetchCharacters();
-  }, [numberOfCharacters]);
+  }, [rounds]);
 
   return { characters, isLoading, errorData };
 }
