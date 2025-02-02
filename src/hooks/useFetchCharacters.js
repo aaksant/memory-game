@@ -2,9 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-export default function useFetchCharacters(
-  url = 'https://api.jikan.moe/v4/top/characters'
-) {
+export default function useFetchCharacters(numberOfCharacters) {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorData, setErrorData] = useState({
@@ -16,6 +14,7 @@ export default function useFetchCharacters(
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
+        const url = 'https://api.jikan.moe/v4/top/characters';
         const response = await axios.get(url);
 
         // Response structure might be change
@@ -33,7 +32,7 @@ export default function useFetchCharacters(
           }
         );
 
-        setCharacters(characters);
+        setCharacters(characters.slice(0, Math.ceil(numberOfCharacters / 2)));
       } catch (error) {
         let errorMessage = 'An unexpected error occured';
 
@@ -57,7 +56,7 @@ export default function useFetchCharacters(
     };
 
     fetchCharacters();
-  }, [url]);
+  }, [numberOfCharacters]);
 
   return { characters, isLoading, errorData };
 }
