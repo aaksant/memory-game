@@ -9,6 +9,7 @@ export default function App() {
     level: null
   });
   const [clickedCards, setClickedCards] = useState([]);
+  const [currentRound, setCurrentRound] = useState(1);
 
   const handleStartGame = level => {
     setGameState({
@@ -22,6 +23,18 @@ export default function App() {
       console.log('clicked');
     } else {
       setClickedCards([...clickedCards, cardId]);
+      updateRound();
+    }
+  };
+
+  const updateRound = () => {
+    if (currentRound === gameState.level.rounds - 1) {
+      setGameState({
+        isPlaying: false,
+        level: null
+      });
+    } else {
+      setCurrentRound(currentRound + 1);
     }
   };
 
@@ -30,7 +43,11 @@ export default function App() {
       {!gameState.isPlaying ? (
         <Home handleStartGame={handleStartGame} />
       ) : (
-        <Game level={gameState.level} handleCardClick={recordClickedCard} />
+        <Game
+          level={gameState.level}
+          currentRound={currentRound}
+          handleCardClick={recordClickedCard}
+        />
       )}
       <Toaster />
     </div>
