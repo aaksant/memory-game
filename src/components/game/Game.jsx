@@ -2,8 +2,15 @@ import Cards from './Cards';
 import useFetchCharacters from '../../hooks/useFetchCharacters';
 import Loading from './Loading';
 import RoundCounter from './RoundCounter';
+import Scoreboard from './Scoreboard';
 
-export default function Game({ level, currentRound, handleCardClick }) {
+export default function Game({
+  level,
+  currentRound,
+  score,
+  bestScore,
+  handleCardClick
+}) {
   const { characters, isLoading } = useFetchCharacters(level.rounds);
 
   const shuffle = arr => {
@@ -21,6 +28,7 @@ export default function Game({ level, currentRound, handleCardClick }) {
         <Loading />
       ) : (
         <>
+          <Scoreboard score={score} bestScore={bestScore} />
           <RoundCounter
             currentRound={currentRound}
             totalRounds={level.rounds}

@@ -4,18 +4,16 @@ import Game from './components/game/Game';
 import Home from './components/home/Home';
 
 export default function App() {
-  const [gameState, setGameState] = useState({
-    isPlaying: false,
-    level: null
-  });
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [selectedLevel, setSelectedLevel] = useState(null);
   const [clickedCards, setClickedCards] = useState([]);
   const [currentRound, setCurrentRound] = useState(1);
+  const [score, setScore] = useState(0);
+  const [bestScore, setBestScore] = useState(0);
 
   const handleStartGame = level => {
-    setGameState({
-      isPlaying: true,
-      level: level
-    });
+    setIsPlaying(true);
+    setSelectedLevel(level);
   };
 
   const recordClickedCard = cardId => {
@@ -23,12 +21,14 @@ export default function App() {
       reset();
     } else {
       setClickedCards([...clickedCards, cardId]);
+      setScore(score + 1);
+      setBestScore(bestScore + 1);
       updateRound();
     }
   };
 
   const updateRound = () => {
-    if (currentRound === gameState.level.rounds - 1) {
+    if (currentRound === selectedLevel.rounds - 1) {
       reset();
     } else {
       setCurrentRound(currentRound + 1);
@@ -36,22 +36,23 @@ export default function App() {
   };
 
   const reset = () => {
-    setGameState({
-      isPlaying: false,
-      level: null
-    });
-    setCurrentRound(1);
+    setIsPlaying(false);
+    setSelectedLevel(null);
     setClickedCards([]);
+    setCurrentRound(1);
+    setScore(0);
   };
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center p-4">
-      {!gameState.isPlaying ? (
+      {!isPlaying ? (
         <Home handleStartGame={handleStartGame} />
       ) : (
         <Game
-          level={gameState.level}
+          level={selectedLevel}
           currentRound={currentRound}
+          score={score}
+          bestScore={bestScore}
           handleCardClick={recordClickedCard}
         />
       )}
