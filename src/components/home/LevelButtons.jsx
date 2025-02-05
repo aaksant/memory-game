@@ -1,7 +1,6 @@
 import LevelButton from './LevelButton';
-import levels from '../../levels';
 
-export default function LevelButtons({ handleStartGame }) {
+export default function LevelButtons({ levels, handleStartGame }) {
   return (
     <div className="flex flex-wrap items-center justify-center gap-4">
       {levels.map((level, index) => (
