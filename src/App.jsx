@@ -9,7 +9,7 @@ export default function App() {
   const [clickedCards, setClickedCards] = useState([]);
   const [currentRound, setCurrentRound] = useState(1);
   const [score, setScore] = useState(0);
-  const [bestScore, setBestScore] = useState(0);
+  const [bestScores, setBestScores] = useState({});
 
   const handleStartGame = level => {
     setIsPlaying(true);
@@ -22,16 +22,28 @@ export default function App() {
     } else {
       setClickedCards([...clickedCards, cardId]);
       setScore(score + 1);
-      setBestScore(bestScore + 1);
+      updateBestScore(score + 1);
       updateRound();
     }
   };
 
+  const updateBestScore = newScore => {
+    setBestScores(prevBestScores => {
+      const currentBestScore = prevBestScores[selectedLevel.text] || 0;
+
+      if (newScore > currentBestScore) {
+        return { ...prevBestScores, [selectedLevel.text]: newScore };
+      }
+
+      return prevBestScores;
+    });
+  };
+
   const updateRound = () => {
-    if (currentRound === selectedLevel.rounds - 1) {
-      reset();
-    } else {
+    if (currentRound < selectedLevel.rounds) {
       setCurrentRound(currentRound + 1);
+    } else {
+      reset();
     }
   };
 
@@ -52,7 +64,7 @@ export default function App() {
           level={selectedLevel}
           currentRound={currentRound}
           score={score}
-          bestScore={bestScore}
+          bestScore={bestScores[selectedLevel.text] || 0}
           handleCardClick={recordClickedCard}
         />
       )}
