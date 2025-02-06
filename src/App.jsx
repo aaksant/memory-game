@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import Game from './components/game/Game';
 import Home from './components/home/Home';
+import useLocalStorage from './hooks/useLocalStorage';
 
 export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -9,7 +10,7 @@ export default function App() {
   const [clickedCards, setClickedCards] = useState([]);
   const [currentRound, setCurrentRound] = useState(1);
   const [score, setScore] = useState(0);
-  const [bestScores, setBestScores] = useState({});
+  const [bestScores, setBestScores] = useLocalStorage('bestScores', {});
 
   const handleStartGame = level => {
     setIsPlaying(true);
