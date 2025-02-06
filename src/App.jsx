@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import Game from './components/game/Game';
 import Home from './components/home/Home';
+import GameOverModal from './components/modals/GameOverModal';
+import LevelCompleteModal from './components/modals/LevelCompleteModal';
 import useLocalStorage from './hooks/useLocalStorage';
 
 export default function App() {
@@ -11,6 +13,8 @@ export default function App() {
   const [currentRound, setCurrentRound] = useState(1);
   const [score, setScore] = useState(0);
   const [bestScores, setBestScores] = useLocalStorage('bestScores', {});
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [isLevelComplete, setIsLevelComplete] = useState(false);
 
   const handleStartGame = level => {
     setIsPlaying(true);
@@ -19,7 +23,7 @@ export default function App() {
 
   const recordClickedCard = cardId => {
     if (clickedCards.includes(cardId)) {
-      reset();
+      setIsGameOver(true);
     } else {
       setClickedCards([...clickedCards, cardId]);
       setScore(score + 1);
@@ -44,7 +48,7 @@ export default function App() {
     if (currentRound < selectedLevel.rounds) {
       setCurrentRound(currentRound + 1);
     } else {
-      reset();
+      setIsLevelComplete(true);
     }
   };
 
@@ -54,6 +58,8 @@ export default function App() {
     setClickedCards([]);
     setCurrentRound(1);
     setScore(0);
+    setIsGameOver(false);
+    setIsLevelComplete(false);
   };
 
   return (
@@ -61,14 +67,22 @@ export default function App() {
       {!isPlaying ? (
         <Home bestScores={bestScores} handleStartGame={handleStartGame} />
       ) : (
-        <Game
-          level={selectedLevel}
-          currentRound={currentRound}
-          score={score}
-          bestScore={bestScores[selectedLevel.name] || 0}
-          handleCardClick={recordClickedCard}
-        />
+        <div
+          className={
+            isGameOver || isLevelComplete ? 'pointer-events-none blur-sm' : ''
+          }
+        >
+          <Game
+            level={selectedLevel}
+            currentRound={currentRound}
+            score={score}
+            bestScore={bestScores[selectedLevel.name] || 0}
+            handleCardClick={recordClickedCard}
+          />
+        </div>
       )}
+      {isGameOver && <GameOverModal handleRestart={reset} />}
+      {isLevelComplete && <LevelCompleteModal handleRestart={reset} />}
       <Toaster />
     </div>
   );
