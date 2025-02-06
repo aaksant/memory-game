@@ -5,7 +5,7 @@ export default function LevelButtons({ levels, handleStartGame }) {
     <div className="flex flex-wrap items-center justify-center gap-4">
       {levels.map((level, index) => (
         <LevelButton
-          text={level.text}
+          name={level.name}
           key={index}
           handleStartGame={() => handleStartGame(level)}
         />

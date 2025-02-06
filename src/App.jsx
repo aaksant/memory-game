@@ -29,10 +29,10 @@ export default function App() {
 
   const updateBestScore = newScore => {
     setBestScores(prevBestScores => {
-      const currentBestScore = prevBestScores[selectedLevel.text] || 0;
+      const currentBestScore = prevBestScores[selectedLevel.name] || 0;
 
       if (newScore > currentBestScore) {
-        return { ...prevBestScores, [selectedLevel.text]: newScore };
+        return { ...prevBestScores, [selectedLevel.name]: newScore };
       }
 
       return prevBestScores;
@@ -58,13 +58,13 @@ export default function App() {
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center p-4">
       {!isPlaying ? (
-        <Home handleStartGame={handleStartGame} />
+        <Home bestScores={bestScores} handleStartGame={handleStartGame} />
       ) : (
         <Game
           level={selectedLevel}
           currentRound={currentRound}
           score={score}
-          bestScore={bestScores[selectedLevel.text] || 0}
+          bestScore={bestScores[selectedLevel.name] || 0}
           handleCardClick={recordClickedCard}
         />
       )}
