@@ -81,7 +81,7 @@ export default function App() {
           />
         </div>
       )}
-      {isGameOver && <GameOverModal handleRestart={reset} />}
+      {isGameOver && <GameOverModal score={score} handleRestart={reset} />}
       {isLevelComplete && <LevelCompleteModal handleRestart={reset} />}
       <Toaster />
     </div>

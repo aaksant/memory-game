@@ -1,7 +1,7 @@
 export default function Card({ image_url, name, handleCardClick }) {
   return (
     <article
-      className="w-64 transform cursor-pointer overflow-hidden rounded-lg bg-white shadow-lg transition-transform hover:shadow-xl md:w-56"
+      className="w-56 transform cursor-pointer overflow-hidden rounded-lg bg-white shadow-lg transition-transform hover:shadow-xl md:w-48"
       onClick={handleCardClick}
     >
       <img
